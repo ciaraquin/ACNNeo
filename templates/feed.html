@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Feed</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"/>
+    <style>
+    body {
+        background: #FFFAEC;
+        color: #553a32;
+        font-family: 'Open Sans', sans-serif;
+        margin: 0;
+    }
+    nav {
+      background:#ffcaca7b;
+      border-bottom: 1px solid #ffaaaa;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-user { font-size: 13px; color: #b89490; }
+    .nav-user span { color: #714e43; }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+    .nav-left { display: flex; align-items: center; gap: 14px; }
+    .nav-left a, .nav-right a { gap: 14px; color: #714e43; text-decoration: none; font-weight: 500; }
+    .nav-left a:hover, .nav-right a:hover { color: #ffaaaa; }
+    .layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 28px 20px;
+      display: grid;
+      grid-template-columns: 1fr 260px;
+      gap: 24px;
+    }
+    .new-post {
+      background: #fff6f6;
+      border: 1px solid #ffcaca;
+      border-radius: 10px;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+    }
+    .posts { 
+        display: flex; 
+        flex-direction: column; 
+        gap: 20px;
+    }
+    .post {
+      background: #fff6f6;
+      border: 1px solid #ffcaca;
+      border-radius: 10px;
+      padding: 18px;
+    }
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .sidebar { 
+        display: flex; 
+        flex-direction: column; 
+        padding-left: 10px;
+        padding-top: 80px;
+    }
+
+    .avatar {
+      width: 34px; height: 34px;
+      background: #ffefe0;
+      border: 1px solid #ffcaca;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 500;
+      color: #714e43;
+      flex-shrink: 0;
+    }
+
+    input {
+      width: 90%;
+      padding: 8px;
+      border: 1px solid #afabab;
+      margin-top: 8px;
+      color: #714e43;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 11px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: #714e43;
+      box-shadow: 0 0 0 3px #afabab;
+    }
+
+    textarea {
+        resize: none;
+        font-size: 11px;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      background: #ffaaaa;
+      color: #714e43;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      align-items: center;
+      justify-content: center;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #714e43;
+      margin-bottom: 8px;
+      margin-top: 8px;
+    }
+
+    input {
+      width: 85%;
+      padding: 14px;
+      border: 1px solid #afabab;
+      color: #714e43;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    input::placeholder { color: #afabab; }
+
+    .post-author { font-size: 13px; font-weight: 500; }
+    .post-time   { font-size: 11px; color: #714e43; margin-top: 1px; }
+
+    .post-body { font-size: 14px; line-height: 1.7; color: #714e43; }
+
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="/">Feed</a>
+            <a href="/group">Group</a>
+            <a href="/about">About</a>
+        </div>
+        <div class="nav-right">
+            <a href="/logout">Logout</a>
+            <span class="nav-user">@<span>{{ current_user}}</span></span>
+        </div>
+    </nav>
+
+
+    <div class="layout">
+
+    <main>
+
+        <h1>Welcome to your feed, @{{ current_user}}!</h1>
+        <p>This is where you'll see updates from your groups and friends.</p>
+        <div class="posts">
+            {% for post in posts %}
+            <div class="post">
+                <strong>{{ post.author }}</strong>
+                <span>{{ post.created_at.strftime('%d %b %Y · %H:%M') }}</span>
+                <span style="font-size:11px; color:#b89490; margin-left:6px;">#{{ post.group_id }}</span>
+                <p>{{ post.body }}</p>
+            </div>
+            {% else %}
+            <p style="color:#b89490; font-size:13px;">No posts yet. Join a group to see posts.</p>
+            {% endfor %}
+        </div>
+        
+    </main>
+    <aside class="sidebar">
+        <div class="new-post">
+            <form name="new_post" method="POST" action="/post">
+                New Post
+                <br>
+                <div class="field">
+                    <input type="text" id="body" name="body" placeholder="What's on your mind?" required autocomplete="off"/>
+                </div>
+                {% if user_groups %}
+                <label for="group_id" style="font-size:12px; margin-top:8px;">Post to group</label>
+                <select id="group_id" name="group_id" style="width:100%; padding:8px; border:1px solid #ffcaca; border-radius:6px; background:#fffaec; color:#553a32; font-size:13px; margin-bottom:4px;">
+                    {% for gid in user_groups %}
+                    <option value="{{ gid }}">{{ gid }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn">Post</button>
+                {% else %}
+                <p style="font-size:12px; color:#b89490; margin-top:8px;">Join a group to post.</p>
+                {% endif %}
+            </form>
+        </div>
+
+</body>
+</html>

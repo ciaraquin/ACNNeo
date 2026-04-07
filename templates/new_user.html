@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CipherNet — Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      background: #FFFAEC;
+      color: #ffcaca7b;
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      max-width: 420px;
+      padding: 48px 40px;
+      background: #ffefe0;
+      border-radius: 20px;
+      border: 1px solid #ffaaaa;
+      animation: fadeUp 0.6s ease both;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ffcaca7b, transparent);
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: #714e43;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      margin-bottom: 36px;
+      line-height: 1.5;
+      color: #714e43;
+    }
+
+    .field {
+      margin-bottom: 20px;
+      color: #714e43;
+    }
+
+    label {
+      display: block;
+      font-size: 11px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #714e43;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 80%;
+      padding: 14px;
+      border: 1px solid #afabab;
+      color: #714e43;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      padding: 12px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus {
+      border-color: #714e43;
+      box-shadow: 0 0 0 3px #afabab;
+    }
+
+    input::placeholder { color: #afabab; }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      margin-top: 8px;
+      background: #ffaaaa;
+      color: #714e43;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .flash {
+      background: rgba(255,77,109,0.1);
+      border: 1px solid #f86363;
+      color: #c0392b;
+      font-size: 13px;
+      padding: 10px 14px;
+      margin-bottom: 20px;
+    }
+
+    .footer, .footer a {
+      text-align: center;
+      font-size: 13px;
+      color: #714e43;
+      margin-top: 20px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Welcome!</h1>
+    <p class="subtitle">Make an account to access your encrypted feed.</p>
+
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="flash">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="/register">
+      <div class="field">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" placeholder="your_handle" required autocomplete="username"/>
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" placeholder="*****" required autocomplete="current-password"/>
+      </div>
+      <div class="field">
+        <label for="confirm_password">Confirm Password</label>
+        <input type="password" id="confirm_password" name="confirm_password" placeholder="*****" required autocomplete="current-password"/>
+      </div>
+
+      <button type="submit" class="btn">Create an account</button>
+    </form>
+    <br>
+    <div class="footer">
+      Already have an account? <a href="/login">Sign in</a>
+    </div>
+  </div>
+</body>
+</html>

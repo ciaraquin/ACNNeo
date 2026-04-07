@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Groups</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet"/>
+    <style>
+    body {
+        background: #FFFAEC;
+        color: #553a32;
+        font-family: 'Open Sans', sans-serif;
+        margin: 0;
+    }
+    nav {
+      background:#ffcaca7b;
+      border-bottom: 1px solid #ffaaaa;
+      padding: 0 24px;
+      height: 52px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-user { font-size: 13px; color: #b89490; }
+    .nav-user span { color: #714e43; }
+    .nav-right { display: flex; align-items: center; gap: 14px; }
+    .nav-left  { display: flex; align-items: center; gap: 14px; }
+    .nav-left a, .nav-right a { color: #714e43; text-decoration: none; font-weight: 500; }
+    .nav-left a:hover, .nav-right a:hover { color: #ffaaaa; }
+
+    .layout {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 28px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    h3 { font-size: 16px; margin: 0 0 12px; }
+    p.sub { font-size: 13px; color: #b89490; margin: 0 0 20px; }
+
+    .card {
+      background: #fff6f6;
+      border: 1px solid #ffcaca;
+      border-radius: 10px;
+      padding: 20px;
+    }
+
+    .card h2 {
+      font-size: 14px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #b89490;
+      margin: 0 0 14px;
+    }
+
+    .member-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+
+    .member {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .avatar {
+      width: 34px; height: 34px;
+      background: #ffefe0;
+      border: 1px solid #ffcaca;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 600;
+      color: #714e43;
+      flex-shrink: 0;
+    }
+
+    .member-name { font-size: 13px; font-weight: 500; }
+
+    .admin-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    .inline-form {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 9px 12px;
+      border: 1px solid #ffcaca;
+      border-radius: 6px;
+      background: #fffaec;
+      color: #553a32;
+      font-size: 13px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus { border-color: #ffaaaa; }
+    input[type="text"]::placeholder { color: #c8b4af; }
+
+    select {
+      padding: 9px 12px;
+      border: 1px solid #ffcaca;
+      border-radius: 6px;
+      background: #fffaec;
+      color: #553a32;
+      font-size: 13px;
+      outline: none;
+    }
+
+    .btn {
+      padding: 9px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .btn-add    { background: #ffaaaa; color: #714e43; }
+    .btn-remove { background: #ffefe0; color: #c26b3c; border: 1px solid #ffd0b0; }
+    .btn-create { background: #ffaaaa; color: #714e43; }
+
+    .flash {
+      background: #ffefe0;
+      border: 1px solid #ffcaca;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #714e43;
+    }
+
+    .divider {
+      border: none;
+      border-top: 1px solid #ffcaca;
+      margin: 14px 0;
+    }
+
+    .group-name-tag {
+      display: inline-block;
+      background: #ffefe0;
+      color: #c26b3c;
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="/feed">Feed</a>
+            <a href="/group">Groups</a>
+            <a href="/about">About</a>
+        </div>
+        <div class="nav-right">
+            <a href="/logout">Logout</a>
+            <span class="nav-user">@<span>{{ current_user }}</span></span>
+        </div>
+    </nav>
+
+    <div class="layout">
+
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for msg in messages %}
+              <div class="flash">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <div>
+            <h1>Groups</h1>
+            <p class="sub">{{ groups | length }} group{{ 's' if groups | length != 1 else '' }}</p>
+        </div>
+
+        <!-- Create Group -->
+        <div class="card">
+            <h2>Create New Group</h2>
+            <form method="POST" action="/admin/create_group" class="inline-form">
+                <input type="text" name="group_id" placeholder="Group name" required/>
+                <button type="submit" class="btn btn-create">Create</button>
+            </form>
+        </div>
+
+        <!-- Each Group -->
+        {% for gid, gdata in groups.items() %}
+        <div class="card">
+            <span class="group-name-tag">#{{ gid }}</span>
+            <p class="sub">{{ gdata.members | length }} member{{ 's' if gdata.members | length != 1 else '' }}</p>
+
+            <h3>Members</h3>
+            <div class="member-list">
+                {% for member in gdata.members %}
+                <div class="member">
+                    <div class="avatar">{{ member[0].upper() }}</div>
+                    <span class="member-name">@{{ member }}</span>
+                </div>
+                {% else %}
+                <p style="color:#b89490; font-size:13px;">No members yet.</p>
+                {% endfor %}
+            </div>
+
+            <hr class="divider"/>
+
+            <h3>Admin Controls</h3>
+            <div class="admin-actions">
+                <form method="POST" action="/admin/add_user" class="inline-form">
+                    <input type="hidden" name="group_id" value="{{ gid }}"/>
+                    <input type="text" name="username" placeholder="Add username" required/>
+                    <button type="submit" class="btn btn-add">Add</button>
+                </form>
+                <form method="POST" action="/admin/remove_user" class="inline-form">
+                    <input type="hidden" name="group_id" value="{{ gid }}"/>
+                    <input type="text" name="username" placeholder="Remove username" required/>
+                    <button type="submit" class="btn btn-remove">Remove</button>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <p style="color:#b89490; font-size:13px;">No groups yet. Create one above.</p>
+        {% endfor %}
+
+    </div>
+</body>
+</html>
